@@ -332,12 +332,3 @@ SWAGGER_SETTINGS = { # "Token <YOUR TOKEN>""
         }
     },
 }
-
-
-THIRD_PARTY_PLUGGINS = get_env_var("THIRD_PARTY_PLUGGINS", default=[], var_type=list)
-
-INSTALLED_PLUGINS = [
-    # 'pluggins.payment.stripe'
-]
-
-INSTALLED_PLUGINS += INSTALLED_PLUGINS + THIRD_PARTY_PLUGGINS
