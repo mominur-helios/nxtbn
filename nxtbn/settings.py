@@ -135,7 +135,10 @@ ROOT_URLCONF = 'nxtbn.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        'DIRS': [
+            os.path.join(BASE_DIR, 'templates'),
+            os.path.join(BASE_DIR, 'nxtbn.pluggins'),
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -332,3 +335,6 @@ SWAGGER_SETTINGS = { # "Token <YOUR TOKEN>""
         }
     },
 }
+
+
+PLUGIN_UPLOAD_DIR = 'nxtbn.pluggins/'

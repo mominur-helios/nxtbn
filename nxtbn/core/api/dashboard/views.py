@@ -1,6 +1,8 @@
 import os
 import zipfile
 
+from django.conf import settings
+
 from rest_framework import generics, status
 from rest_framework.response import Response
 from django.utils.translation import gettext_lazy as _
@@ -15,8 +17,8 @@ from django.core.files.storage import FileSystemStorage
 
 from nxtbn.core.api.dashboard.serializers import ZipFileUploadSerializer
 
+PLUGIN_UPLOAD_DIR = getattr(settings, 'PLUGIN_UPLOAD_DIR')
 
-PLUGIN_UPLOAD_DIR = 'nxtbn.pluggins/'
 os.makedirs(PLUGIN_UPLOAD_DIR, exist_ok=True)
 
 
