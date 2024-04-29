@@ -13,6 +13,8 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+import os
+import importlib
 import sys
 from django.http import HttpResponse
 from django.conf import settings
@@ -99,3 +101,21 @@ API_DOCS_SCHEMA_VIEWS = get_schema_view(
 urlpatterns += [
     path("api-playground/", API_DOCS_SCHEMA_VIEWS.with_ui("swagger", cache_timeout=0), name="api_playground")
 ]
+
+
+
+
+plugin_urls = []
+
+PLUGIN_DIR = getattr(settings, 'PLUGIN_UPLOAD_DIR')
+
+if os.path.exists(PLUGIN_DIR):
+    for plugin in os.listdir(PLUGIN_DIR):
+        try:
+            module_path = f"{PLUGIN_DIR}.{plugin}.urls"
+            module = importlib.import_module(module_path)
+            plugin_urls.append(path(plugin, include(module_path)))
+        except Exception as e:
+            print(f"Failed to load plugin '{plugin}': {e}")
+
+urlpatterns += plugin_urls
