@@ -19,11 +19,12 @@ class Payment(AbstractBaseModel):
     payment_method = models.CharField(max_length=20, choices=PaymentMethod.choices)
 
     # For storing payment gateway references
-    transaction_id = models.CharField(max_length=100, blank=True, null=True)  
+    transaction_id = models.CharField(max_length=100, blank=True, null=True, unique=True)  
     payment_getway = models.CharField(max_length=100, blank=True, null=True) 
 
     payment_status = models.CharField(max_length=20, choices=PaymentStatus.choices, default=PaymentStatus.AUTHORIZED)
     payment_amount = models.DecimalField(max_digits=12, decimal_places=3, validators=[MinValueValidator(Decimal("0.01"))])
+    getway_response_raw = models.JSONField(null=True, blank=True)
     paid_at = models.DateTimeField(blank=True, null=True)
 
     def authorize_payment(self, amount: Decimal):
@@ -33,6 +34,8 @@ class Payment(AbstractBaseModel):
         # Update model fields based on the response
         if response:
             self.transaction_id = response.transaction_id
+            if response.raw_data:
+                self.getway_response_raw = response.raw_data
             self.payment_status = PaymentStatus.AUTHORIZED
             self.save()
         return response
@@ -44,6 +47,8 @@ class Payment(AbstractBaseModel):
         if response:
             self.payment_status = PaymentStatus.CAPTURED
             self.paid_at = timezone.now()
+            if response.raw_data:
+                self.getway_response_raw = response.raw_data
             self.save()
         return response
 
@@ -53,6 +58,8 @@ class Payment(AbstractBaseModel):
         response = manager.cancel_payment(str(self.order.id))
         if response:
             self.payment_status = PaymentStatus.CANCELED
+            if response.raw_data:
+                self.getway_response_raw = response.raw_data
             self.save()
         return response
 
@@ -62,5 +69,7 @@ class Payment(AbstractBaseModel):
         response = manager.refund_payment(amount, str(self.order.id))
         if response:
             self.payment_status = PaymentStatus.REFUNDED
+            if response.raw_data:
+                self.getway_response_raw = response.raw_data
             self.save
 
