@@ -12,6 +12,7 @@ from nxtbn.payment.payment_manager import PaymentManager
 from nxtbn.users.admin import User
 
 
+
 class Payment(AbstractBaseModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True, related_name="+")
     order = models.OneToOneField(Order, on_delete=models.CASCADE, related_name="payment")
@@ -21,7 +22,7 @@ class Payment(AbstractBaseModel):
     transaction_id = models.CharField(max_length=100, blank=True, null=True)  
     payment_getway = models.CharField(max_length=100, blank=True, null=True) 
 
-    payment_status = models.CharField(max_length=20, choices=PaymentStatus.choices, default=PaymentStatus.PENDING)
+    payment_status = models.CharField(max_length=20, choices=PaymentStatus.choices, default=PaymentStatus.AUTHORIZED)
     payment_amount = models.DecimalField(max_digits=12, decimal_places=3, validators=[MinValueValidator(Decimal("0.01"))])
     paid_at = models.DateTimeField(blank=True, null=True)
 
