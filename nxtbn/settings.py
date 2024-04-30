@@ -343,5 +343,5 @@ PLUGIN_UPLOAD_DIR = 'nxtbn.pluggins/'
 
 # NXBTN payment base payment getways configuration
 PAYMENT_GATEWAYS = {
-    "stripe": "nxtbn.payment.payment_gateway.StripeGateway",
+    # "stripe": "nxtbn.payment.payment_gateway.StripeGateway",
 }

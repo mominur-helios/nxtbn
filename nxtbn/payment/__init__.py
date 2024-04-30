@@ -4,15 +4,15 @@ from django.utils.translation import gettext_lazy as _
 class PaymentStatus(models.TextChoices):
     """Defines the different statuses of a payment process.
 
-    - 'PENDING': Payment has been initiated but not yet completed.
-    - 'COMPLETED': Payment has been successfully completed.
+    - 'AUTHORIZED': Payment has been initiated but not yet completed. authorized means it is still pending
+    - 'CAPTURED': Captured has been successfully completed. captured means the payment has be completed
     - 'FAILED': Payment attempt has failed or was unsuccessful.
     - 'REFUNDED': Payment has been refunded to the customer.
     - 'CANCELED': Payment has been canceled before completion.
     """
 
-    PENDING = "PENDING", _("Pending")
-    COMPLETED = "COMPLETED", _("Completed")
+    AUTHORIZED = "AUTHORIZED", _("Authorized")
+    CAPTURED = "CAPTURED", _("Captured")
     FAILED = "FAILED", _("Failed")
     REFUNDED = "REFUNDED", _("Refunded")
     CANCELED = "CANCELED", _("Canceled")
