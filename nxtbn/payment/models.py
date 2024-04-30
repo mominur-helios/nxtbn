@@ -1,3 +1,4 @@
+from datetime import timezone
 from django.db import models
 
 from nxtbn.core.models import AbstractBaseModel
@@ -7,6 +8,7 @@ from django.core.validators import MinValueValidator
 from decimal import Decimal
 
 from nxtbn.payment import PaymentMethod, PaymentStatus
+from nxtbn.payment.payment_manager import PaymentManager
 from nxtbn.users.admin import User
 
 
@@ -22,4 +24,42 @@ class Payment(AbstractBaseModel):
     payment_status = models.CharField(max_length=20, choices=PaymentStatus.choices, default=PaymentStatus.PENDING)
     payment_amount = models.DecimalField(max_digits=12, decimal_places=3, validators=[MinValueValidator(Decimal("0.01"))])
     paid_at = models.DateTimeField(blank=True, null=True)
+
+    def authorize_payment(self, amount: Decimal):
+        """Authorize payment through the specified gateway."""
+        manager = PaymentManager(self.payment_getway)
+        response = manager.authorize_payment(amount, str(self.order.id))
+        # Update model fields based on the response
+        if response:
+            self.transaction_id = response.transaction_id
+            self.payment_status = PaymentStatus.AUTHORIZED
+            self.save()
+        return response
+
+    def capture_payment(self, amount: Decimal):
+        """Capture authorized payment."""
+        manager = PaymentManager(self.payment_getway)
+        response = manager.capture_payment(amount, str(self.order.id))
+        if response:
+            self.payment_status = PaymentStatus.CAPTURED
+            self.paid_at = timezone.now()
+            self.save()
+        return response
+
+    def cancel_payment(self):
+        """Cancel authorized payment."""
+        manager = PaymentManager(self.payment_getway)
+        response = manager.cancel_payment(str(self.order.id))
+        if response:
+            self.payment_status = PaymentStatus.CANCELED
+            self.save()
+        return response
+
+    def refund_payment(self, amount: Decimal):
+        """Refund captured payment."""
+        manager = PaymentManager(self.payment_getway)
+        response = manager.refund_payment(amount, str(self.order.id))
+        if response:
+            self.payment_status = PaymentStatus.REFUNDED
+            self.save
 

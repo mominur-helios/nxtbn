@@ -101,6 +101,7 @@ LOCAL_APPS = [
     'nxtbn.tax',
     'nxtbn.filemanager',
     'nxtbn.vendor',
+    'nxtbn.cart',
 ]
 
 HELPING_HAND_APPS = [
@@ -338,3 +339,9 @@ SWAGGER_SETTINGS = { # "Token <YOUR TOKEN>""
 
 
 PLUGIN_UPLOAD_DIR = 'nxtbn.pluggins/'
+
+
+# NXBTN payment base payment getways configuration
+PAYMENT_GATEWAYS = {
+    "stripe": "nxtbn.payment.payment_gateway.StripeGateway",
+}
