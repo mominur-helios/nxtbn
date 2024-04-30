@@ -4,7 +4,6 @@
 
 ![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)
 ![Test Coverage](https://img.shields.io/codecov/c/github/nxtbn-com/nxtbn)  <!-- CodeCov test coverage -->
-[![CodeQL](https://github.com/nxtbn-com/nxtbn/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/nxtbn-com/nxtbn/actions/workflows/codeql-analysis.yml)
 
 ![Code Quality](https://img.shields.io/codacy/grade/nxtbn-com/nxtbn)  <!-- Codacy or Code Climate code quality -->
 ![Django Version](https://img.shields.io/badge/Django-4.2-blue)  <!-- Supported Django versions -->
