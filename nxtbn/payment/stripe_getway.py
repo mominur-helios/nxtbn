@@ -1,12 +1,12 @@
 import stripe
 from decimal import Decimal
 from django.conf import settings
-from nxtbn.payment.abstract_payment_getway import PaymentGateway, PaymentResponse
+from nxtbn.payment.base_payment_getway import BasePaymentGateway, PaymentResponse
 
 
 stripe.api_key = getattr(settings, 'STRIPE_SECRET_KEY', '')
 
-class StripePaymentGateway(PaymentGateway):
+class StripePaymentGateway(BasePaymentGateway):
     """Stripe payment gateway implementation."""
 
     def authorize(self, amount: Decimal, order_id: str, **kwargs):

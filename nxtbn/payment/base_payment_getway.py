@@ -15,7 +15,7 @@ class PaymentResponse:
     meta_data: Optional[Any] = None
 
 
-class PaymentGateway(ABC):
+class BasePaymentGateway(ABC):
     """Abstract base class for payment gateways."""
 
     @abstractmethod
