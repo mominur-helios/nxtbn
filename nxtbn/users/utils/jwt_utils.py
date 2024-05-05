@@ -11,9 +11,14 @@ ACCESS_TOKEN_EXPIRATION_SECONDS = settings.NXTBN_JWT_SETTINGS['ACCESS_TOKEN_EXPI
 REFRESH_TOKEN_EXPIRATION_SECONDS = settings.NXTBN_JWT_SETTINGS['REFRESH_TOKEN_EXPIRATION_SECONDS']
 
 
-# Generate a JWT token
-def generate_jwt_token(user, expiration_seconds):
+def generate_jwt_token(user, expiration_timedelta):
     """Generate a JWT token for a given user with specified expiration."""
+    # Ensure we're dealing with seconds, converting if needed
+    if isinstance(expiration_timedelta, timedelta):
+        expiration_seconds = expiration_timedelta.total_seconds()  # Convert to seconds
+    else:
+        expiration_seconds = expiration_timedelta
+    
     exp = datetime.now(timezone.utc) + timedelta(seconds=expiration_seconds)
     payload = {
         "user_id": user.id,
@@ -21,12 +26,12 @@ def generate_jwt_token(user, expiration_seconds):
     }
     return jwt.encode(payload, JWT_SECRET_KEY, algorithm=JWT_ALGORITHM)
 
-# Generate access and refresh tokens
 def generate_access_token(user):
     return generate_jwt_token(user, ACCESS_TOKEN_EXPIRATION_SECONDS)
 
 def generate_refresh_token(user):
     return generate_jwt_token(user, REFRESH_TOKEN_EXPIRATION_SECONDS)
+
 
 # Verify a JWT token
 def verify_jwt_token(token):
