@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta, timezone
 import jwt
-from django.contrib.auth.models import User
+from nxtbn.users.models import User
 from django.core.exceptions import ObjectDoesNotExist
 from django.conf import settings
 

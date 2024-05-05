@@ -77,3 +77,6 @@ class JwtBasicUserSerializer(serializers.ModelSerializer):
 class LoginRequestSerializer(serializers.Serializer):
     email = serializers.EmailField(required=True)
     password = serializers.CharField(write_only=True, required=True)
+
+class RefreshSerializer(serializers.Serializer):
+    refresh_token = serializers.CharField(write_only=True, required=True)
