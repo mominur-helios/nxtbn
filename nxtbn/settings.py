@@ -102,7 +102,8 @@ LOCAL_APPS = [
     'nxtbn.filemanager',
     'nxtbn.vendor',
     'nxtbn.cart',
-    'nxtbn.post',
+    'nxtbn.gift_card',
+    # 'nxtbn.content',
 ]
 
 HELPING_HAND_APPS = [

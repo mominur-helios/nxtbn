@@ -13,13 +13,16 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='Vendor',
+            name='GiftCard',
             fields=[
                 ('id', models.UUIDField(default=uuid.uuid4, primary_key=True, serialize=False)),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('last_modified', models.DateTimeField(auto_now=True)),
-                ('name', models.CharField(max_length=100)),
-                ('contact_info', models.TextField(blank=True)),
+                ('code', models.CharField(max_length=20, unique=True)),
+                ('initial_balance', models.DecimalField(decimal_places=2, max_digits=10)),
+                ('current_balance', models.DecimalField(decimal_places=2, max_digits=10)),
+                ('expiration_date', models.DateTimeField(blank=True, null=True)),
+                ('active', models.BooleanField(default=True)),
             ],
             options={
                 'abstract': False,
