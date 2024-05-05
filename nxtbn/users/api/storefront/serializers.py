@@ -10,9 +10,7 @@ from allauth.account.utils import assess_unique_email
 from allauth.account.adapter import get_adapter
 from allauth.account.utils import setup_user_email
 from allauth.account.models import EmailAddress
-from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
-#from django.contrib.auth.forms import PasswordResetForm # It's customizable for both UID/TOKEN and URL
 from allauth.account.forms import ResetPasswordForm # Allauth's which provide only alluth urls to reset password
 
 from nxtbn.users.models import User
@@ -70,14 +68,7 @@ class SignupSerializer(serializers.ModelSerializer):
 
 
 
-class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
-    def validate(self, attrs):
-        data = super().validate(attrs)
-        user = self.user
-        if allauth_settings.EMAIL_VERIFICATION == \
-                allauth_settings.EmailVerificationMethod.MANDATORY:
-            
-            email_address = EmailAddress.objects.get(email=user.email)
-            if not email_address.verified:
-                raise serializers.ValidationError("Email is not verified.")
-        return data
+class JwtBasicUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('id', 'username', 'first_name', 'last_name',)

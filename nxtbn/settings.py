@@ -19,6 +19,8 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 import os
+from datetime import timedelta
+
 import sys
 from dotenv import load_dotenv
 
@@ -350,6 +352,6 @@ PAYMENT_GATEWAYS = {
 NXTBN_JWT_SETTINGS = {
     'SECRET_KEY': get_env_var("JWT_SECRET_KEY", SECRET_KEY), # default django's secret key
     'ALGORITHM': 'HS256',
-    'ACCESS_TOKEN_EXPIRATION_SECONDS': 3600,  # Default to 1 hour
-    'REFRESH_TOKEN_EXPIRATION_SECONDS': 86400,  # 1 day for refresh token
+    'ACCESS_TOKEN_EXPIRATION_SECONDS': timedelta(hours=1),  # Default to 1 hour
+    'REFRESH_TOKEN_EXPIRATION_SECONDS': timedelta(days=1),  # 1 day for refresh token
 }

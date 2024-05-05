@@ -1,23 +1,25 @@
 # views.py
 from rest_framework import generics, status
 from rest_framework.response import Response
-from rest_framework_simplejwt.tokens import RefreshToken
-from nxtbn.users.api.storefront.serializers import CustomTokenObtainPairSerializer, SignupSerializer
-from allauth.account import app_settings as allauth_settings
-from django.utils.translation import gettext_lazy as _
-from rest_framework.permissions  import AllowAny
-from allauth.account.utils import complete_signup
 from rest_framework.views import APIView
+from rest_framework.permissions import AllowAny
+from django.utils.translation import gettext_lazy as _
 from django.contrib.auth import authenticate
+from allauth.account import app_settings as allauth_settings
+from allauth.account.utils import complete_signup
 from allauth.account.models import EmailAddress
 
+from nxtbn.users.api.storefront.serializers import (
+    JwtBasicUserSerializer,
+    SignupSerializer,
+)
+from nxtbn.users.utils.jwt_utils import (
+    generate_access_token,
+    generate_refresh_token,
+    verify_jwt_token,
+)
 
-
-from rest_framework_simplejwt.views import TokenObtainPairView
-
-from nxtbn.users.utils.jwt_utils import generate_access_token, generate_jwt_token, verify_jwt_token
-
-
+# SignupView handles user registration
 class SignupView(generics.CreateAPIView):
     permission_classes = (AllowAny,)
     serializer_class = SignupSerializer
@@ -31,20 +33,23 @@ class SignupView(generics.CreateAPIView):
 
         response_data = {"detail": _("Verification e-mail sent. Please check your email.")}
 
+        # If email verification is not mandatory, include access and refresh tokens
         if allauth_settings.EMAIL_VERIFICATION != allauth_settings.EmailVerificationMethod.MANDATORY:
-            # If email verification is not mandatory, return an access token
             access_token = generate_access_token(user)
+            refresh_token = generate_refresh_token(user)
+
+            user_data = JwtBasicUserSerializer(user).data
             response_data = {
-                'user': serializer.data,
-                'token': {
-                    'access': access_token,
+                "user": user_data,
+                "token": {
+                    "access": access_token,
+                    "refresh": refresh_token,
                 },
             }
 
         return Response(response_data, status=status.HTTP_201_CREATED)
 
-
-
+# LoginView handles user authentication
 class LoginView(APIView):
     permission_classes = (AllowAny,)
 
@@ -62,22 +67,26 @@ class LoginView(APIView):
 
             if email_verification_required and not email_verified:
                 return Response(
-                    {"detail": "Email not verified. Please verify your email."},
+                    {"detail": _("Email not verified. Please verify your email.")},
                     status=status.HTTP_403_FORBIDDEN,
                 )
 
             access_token = generate_access_token(user)
+            refresh_token = generate_refresh_token(user)
 
+            user_data = JwtBasicUserSerializer(user).data
             return Response(
                 {
-                    "user": {"email": user.email},
-                    "token": {"access": access_token},
+                    "user": user_data,
+                    "token": {
+                        "access": access_token,
+                        "refresh": refresh_token,
+                    },
                 },
                 status=status.HTTP_200_OK,
             )
 
-        return Response({"detail": "Invalid credentials"}, status=status.HTTP_400_BAD_REQUEST)
-    
+        return Response({"detail": _("Invalid credentials")}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class TokenRefreshView(APIView):
@@ -88,7 +97,7 @@ class TokenRefreshView(APIView):
 
         if not refresh_token:
             return Response(
-                {"detail": "Refresh token is required."},
+                {"detail": _("Refresh token is required.")},
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
@@ -96,16 +105,21 @@ class TokenRefreshView(APIView):
 
         if user:
             access_token = generate_access_token(user)
+            refresh_token = generate_refresh_token(user)
+
+            user_data = JwtBasicUserSerializer(user).data
             return Response(
                 {
+                    "user": user_data,
                     "token": {
                         "access": access_token,
+                        "refresh": refresh_token,
                     },
                 },
                 status=status.HTTP_200_OK,
             )
 
         return Response(
-            {"detail": "Invalid or expired refresh token."},
+            {"detail": _("Invalid or expired refresh token.")},
             status=status.HTTP_401_UNAUTHORIZED,
         )
