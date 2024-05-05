@@ -1,7 +1,7 @@
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.authentication import BaseAuthentication
 from rest_framework.exceptions import AuthenticationFailed
-from utils.jwt_utils import verify_jwt_token
+from nxtbn.users.utils.jwt_utils import verify_jwt_token
 class CsrfExemptSessionAuthentication(SessionAuthentication):
     '''
         Security Warning: Don't use this in production environment.

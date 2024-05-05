@@ -295,7 +295,6 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated'
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.TokenAuthentication',
         'nxtbn.users.authentication.JWTAuthentication',
         'rest_framework.authentication.SessionAuthentication',
     ],
