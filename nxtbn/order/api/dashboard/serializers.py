@@ -24,7 +24,7 @@ class OrderSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Order
-        fields = [
+        fields = (
             'id',
             'user',
             'vendor',
@@ -38,4 +38,4 @@ class OrderSerializer(serializers.ModelSerializer):
             'promo_code',
             'gift_card',
             'line_items',
-        ]
+        )
