@@ -1,13 +1,10 @@
 # urls.py
 from django.urls import path
-from rest_framework_simplejwt.views import (
-    TokenObtainPairView,
-    TokenRefreshView,
-)
-from nxtbn.users.api.storefront.views import CustomTokenObtainPairView, SignupView
+
+from nxtbn.users.api.storefront.views import LoginView, SignupView, TokenRefreshView
 
 urlpatterns = [
     path('signup/', SignupView.as_view(), name='signup'),
-    path('token/', CustomTokenObtainPairView.as_view(), name='token_obtain_pair'), # login
-    path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('login/', LoginView.as_view(), name='login'),
+     path('refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 ]
