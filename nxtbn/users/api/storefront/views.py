@@ -11,6 +11,7 @@ from allauth.account.models import EmailAddress
 
 from nxtbn.users.api.storefront.serializers import (
     JwtBasicUserSerializer,
+    LoginRequestSerializer,
     SignupSerializer,
 )
 from nxtbn.users.utils.jwt_utils import (
@@ -49,11 +50,18 @@ class SignupView(generics.CreateAPIView):
 
         return Response(response_data, status=status.HTTP_201_CREATED)
 
-# LoginView handles user authentication
-class LoginView(APIView):
+
+
+class LoginView(generics.GenericAPIView):
     permission_classes = (AllowAny,)
+    permission_classes = (AllowAny,)
+    serializer_class = LoginRequestSerializer
 
     def post(self, request):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+
         email = request.data.get("email")
         password = request.data.get("password")
 
