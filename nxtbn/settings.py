@@ -102,6 +102,7 @@ LOCAL_APPS = [
     'nxtbn.filemanager',
     'nxtbn.vendor',
     'nxtbn.cart',
+    'nxtbn.gift_card',
     'nxtbn.post',
 ]
 

@@ -6,6 +6,8 @@ from django.utils.translation import gettext_lazy as _
 from django.core.validators import MinValueValidator
 from decimal import Decimal
 from nxtbn.core.models import AbstractAddressModels, AbstractBaseModel, AbstractBaseUUIDModel
+from nxtbn.discount.models import PromoCode
+from nxtbn.gift_card.models import GiftCard
 from nxtbn.order import OrderAuthorizationStatus, OrderChargeStatus, OrderStatus
 from nxtbn.payment import PaymentMethod
 from nxtbn.product.models import ProductVariant
@@ -47,6 +49,56 @@ class Order(AbstractBaseModel):
         choices=OrderChargeStatus.choices,
         db_index=True,
     )
+    promo_code = models.ForeignKey(PromoCode, on_delete=models.SET_NULL, null=True, blank=True)
+    gift_card = models.ForeignKey(GiftCard, on_delete=models.SET_NULL, null=True, blank=True)
+
+    def apply_promo_code(self):
+        """
+        Apply a promotional code to the order, reducing the total price accordingly.
+
+        If the promo code is valid and active, the discount is calculated based on the type
+        of promo code (either a percentage or a fixed amount). The order's total is reduced
+        by the calculated discount.
+
+        This method does not automatically save the changes to the database. You must call
+        `order.save()` after calling this method to persist changes.
+
+        Returns:
+            decimal.Decimal: The amount of the discount applied to the order, or 0 if no discount is applied.
+    """
+        if self.promo_code and self.promo_code.is_valid():
+            if self.promo_code.code_type == 'percentage':
+                discount = (self.total * (self.promo_code.value / 100))
+            else:
+                discount = self.promo_code.value
+            self.total -= discount
+            return discount
+        return 0
+
+    def apply_gift_card(self):
+        """
+            Apply a gift card to the order, reducing the total price by the balance available on the gift card.
+
+            If the gift card is valid and has sufficient balance, the order's total will be reduced accordingly.
+            If the gift card's balance is greater than or equal to the order's total, the order's total is set to
+            zero. Otherwise, the order's total is reduced by the gift card's balance.
+
+            This method does not automatically save the changes to the database. You must call `order.save()`
+            after calling this method to persist changes.
+
+            Note:
+                This method reduces the gift card's balance according to the applied discount.
+
+            Returns:
+                None
+        """
+        if self.gift_card and self.gift_card.is_valid():
+            if self.gift_card.current_balance >= self.total:
+                self.gift_card.reduce_balance(self.total)
+                self.total = 0
+            else:
+                self.total -= self.gift_card.current_balance
+                self.gift_card.reduce_balance(self.gift_card.current_balance)
     
 
     def __str__(self):
