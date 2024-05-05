@@ -103,7 +103,7 @@ LOCAL_APPS = [
     'nxtbn.vendor',
     'nxtbn.cart',
     'nxtbn.gift_card',
-    # 'nxtbn.content',
+    'nxtbn.post',
 ]
 
 HELPING_HAND_APPS = [
