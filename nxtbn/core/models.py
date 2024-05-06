@@ -7,13 +7,29 @@ from django_extensions.db.fields import AutoSlugField
 from nxtbn.users.admin import User
 
 
-class AbstractBaseUUIDModel(models.Model):
-    id = models.UUIDField(default=uuid.uuid4, primary_key=True)
+class AbstractUUIDModel(models.Model):
+    alias = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
 
     class Meta:
         abstract = True
 
-class NameDescriptionAbstract(AbstractBaseUUIDModel):
+
+    
+class AbstractBaseUUIDModel(AbstractUUIDModel):
+    created_at = models.DateTimeField(auto_now_add=True)
+    last_modified = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        abstract = True
+
+class AbstractBaseModel(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True)
+    last_modified = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        abstract = True
+
+class NameDescriptionAbstract(models.Model):
     name = models.CharField(max_length=255, unique=True)
     description = models.TextField(blank=True, null=True)
 
@@ -22,15 +38,6 @@ class NameDescriptionAbstract(AbstractBaseUUIDModel):
 
     def __str__(self):
         return self.name
-
-class AbstractBaseModel(AbstractBaseUUIDModel):
-    created_at = models.DateTimeField(auto_now_add=True)
-    last_modified = models.DateTimeField(auto_now=True)
-
-    class Meta:
-        abstract = True
-
-
 class PublishableModel(AbstractBaseModel):
     published_date = models.DateTimeField(blank=True, null=True)
     is_live = models.BooleanField(default=False)
@@ -55,7 +62,8 @@ class PublishableModel(AbstractBaseModel):
         abstract = True
 
 
-class SEOMixin:
+
+class AbstractSEOModel(models.Model):
     meta_title = models.CharField(
         max_length=800, blank=True, null=True, help_text="Title for search engine optimization."
     )
@@ -68,7 +76,6 @@ class SEOMixin:
         abstract = True
         verbose_name = "SEO Information"
         verbose_name_plural = "SEO Information"
-
 
 class AbstractAddressModels(AbstractBaseModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True, related_name="+")

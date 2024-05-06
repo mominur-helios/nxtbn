@@ -1,7 +1,7 @@
 from datetime import timezone
 from django.db import models
 
-from nxtbn.core.models import AbstractBaseModel
+from nxtbn.core.models import  AbstractBaseUUIDModel
 from nxtbn.order.models import Order
 from django.utils.translation import gettext_lazy as _
 from django.core.validators import MinValueValidator
@@ -13,7 +13,7 @@ from nxtbn.users.admin import User
 
 
 
-class Payment(AbstractBaseModel):
+class Payment(AbstractBaseUUIDModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True, related_name="+")
     order = models.OneToOneField(Order, on_delete=models.CASCADE, related_name="payment")
     payment_method = models.CharField(max_length=20, choices=PaymentMethod.choices)

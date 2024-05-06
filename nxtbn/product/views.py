@@ -1,3 +1,4 @@
 from django.shortcuts import render
 
-# Create your views here.
+def product_details(request, slug): # for demonstration purposes
+    return 'some-product-details'

@@ -1,18 +1,19 @@
 from django.db import models
 from django.core.validators import MinValueValidator
 from decimal import Decimal
+from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
 
 
-from nxtbn.core.models import PublishableModel, SEOMixin, AbstractBaseUUIDModel, AbstractBaseModel, NameDescriptionAbstract
+from nxtbn.core.models import AbstractSEOModel, PublishableModel, AbstractBaseUUIDModel, AbstractBaseModel, NameDescriptionAbstract
 from nxtbn.filemanager.models import Document, Image
 from nxtbn.product import ProductType, StockStatus, WeightUnits
 from nxtbn.users.admin import User
 from nxtbn.vendor.models import Vendor
 
 
-class Category(NameDescriptionAbstract, SEOMixin):
+class Category(NameDescriptionAbstract, AbstractSEOModel):
     parent = models.ForeignKey(
         'self',
         null=True,
@@ -28,7 +29,7 @@ class Category(NameDescriptionAbstract, SEOMixin):
         verbose_name = _("Category")
         verbose_name_plural = _("Categories")
 
-class Collection(NameDescriptionAbstract, SEOMixin):
+class Collection(NameDescriptionAbstract, AbstractSEOModel):
     created_by = models.ForeignKey(
         User, 
         on_delete=models.SET_NULL,
@@ -51,7 +52,7 @@ class Collection(NameDescriptionAbstract, SEOMixin):
     def __str__(self):
         return self.name
 
-class Product(PublishableModel, SEOMixin):
+class Product(PublishableModel, AbstractSEOModel):
     created_by = models.ForeignKey(User, on_delete=models.PROTECT, related_name='products_created')
     last_modified_by = models.ForeignKey(User, on_delete=models.PROTECT, related_name='products_modified', null=True, blank=True)
     name = models.CharField(max_length=255)
@@ -80,8 +81,17 @@ class Product(PublishableModel, SEOMixin):
     )
     collections = models.ManyToManyField(Collection, blank=True, related_name='products_in_collection')
 
+
     def __str__(self):
         return self.name
+    
+    def get_absolute_url(self):
+        """
+        Returns the absolute URL for this Product instance. 
+        This URL is intended for use within the application, not for API endpoints.
+        It is designed to be used in Jinja templates, and is automatically included in the sitemap.
+        """
+        return reverse("product_detail", args=[self.slug])
 
 
 class ProductVariant(AbstractBaseUUIDModel):
