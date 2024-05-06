@@ -17,7 +17,7 @@ class CollectionAdmin(admin.ModelAdmin):
     list_display = ('id','name', 'is_active', 'created_by', 'last_modified_by')
     list_filter = ('is_active',)
     search_fields = ('name', 'description')
-    readonly_fields = ('created_by', 'last_modified_by')
+    readonly_fields = ('last_modified_by',) 
     fieldsets = (
         (None, {
             'fields': ('name', 'description', 'is_active', 'image')
@@ -42,6 +42,6 @@ class ProductAdmin(admin.ModelAdmin):
     list_display = ('id','name', 'category', 'vendor', 'type', 'subscribable')
     list_filter = ('category', 'vendor', 'type', 'subscribable')
     search_fields = ('name', 'summary', 'description')
-    readonly_fields = ('created_by', 'last_modified_by')
+    readonly_fields = ('last_modified_by',) 
 
 admin.site.register(Product, ProductAdmin)
