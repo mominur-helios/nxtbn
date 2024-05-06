@@ -52,6 +52,8 @@ urlpatterns = [
     path('accounts/', include('allauth.urls')),
     path('accounts/profile/', TemplateView.as_view(template_name='account/profile.html'), name='account_profiles'),
 
+    path('product/', include('nxtbn.product.urls')),
+
     # API
     path('user/storefront/api/', include('nxtbn.users.api.storefront.urls')),
     path('user/dashboard/api/', include('nxtbn.users.api.dashboard.urls')),

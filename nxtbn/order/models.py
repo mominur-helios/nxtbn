@@ -28,7 +28,7 @@ class Address(AbstractAddressModels):
     def __str__(self):
         return f"{self.first_name} {self.last_name}, {self.street_address}, {self.city}, {self.country}"
 
-class Order(AbstractBaseModel):
+class Order(AbstractBaseUUIDModel):
     user = models.ForeignKey(User, on_delete=models.PROTECT, related_name="orders")
     vendor = models.ForeignKey(Vendor, null=True, blank=True, on_delete=models.SET_NULL)
     payment_method = models.CharField(max_length=20, choices=PaymentMethod.choices)
