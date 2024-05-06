@@ -22,7 +22,7 @@ from django.urls import re_path, path, include
 from django.contrib import admin
 from django.views.generic import TemplateView
 
-from nxtbn.swagger_views import DASHBOARD_API_DOCS_SCHEMA_VIEWS, STOREFRONT_API_DOCS_SCHEMA_VIEWS
+from nxtbn.swagger_views import DASHBOARD_API_DOCS_SCHEMA_VIEWS, STOREFRONT_API_DOCS_SCHEMA_VIEWS, api_docs
 
 
 
@@ -46,7 +46,6 @@ admin.site.index_title = "nxtbn Admin"
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('nxtbn.home.urls')),
-    # path('', include('django.contrib.auth.urls')),
 
     path('users/', include('nxtbn.users.urls')),
 
@@ -83,11 +82,12 @@ urlpatterns = [
 ]
 
 urlpatterns += [
-    path("dashboard-swagger-docs/", DASHBOARD_API_DOCS_SCHEMA_VIEWS.with_ui("swagger", cache_timeout=0), name="dashboard_swagger_docs"),
-    path("storefront-swagger-docs/", STOREFRONT_API_DOCS_SCHEMA_VIEWS.with_ui("swagger", cache_timeout=0), name="storefront_swagger_docs"),
+    path('docs/', api_docs, name='api_docs'),
+    path("docs-dashboard-swagger/", DASHBOARD_API_DOCS_SCHEMA_VIEWS.with_ui("swagger", cache_timeout=0), name="docs_dashboard_swagger"),
+    path("docs-storefront-swagger/", STOREFRONT_API_DOCS_SCHEMA_VIEWS.with_ui("swagger", cache_timeout=0), name="docs_storefront_swagger"),
 
-    path("dashboard-redoc-docs/", DASHBOARD_API_DOCS_SCHEMA_VIEWS.with_ui("redoc", cache_timeout=0), name="dashboard_redoc_docs"),
-    path("storefront-redoc-docs/", STOREFRONT_API_DOCS_SCHEMA_VIEWS.with_ui("redoc", cache_timeout=0), name="storefront_redoc_docs")
+    path("docs-dashboard-redoc/", DASHBOARD_API_DOCS_SCHEMA_VIEWS.with_ui("redoc", cache_timeout=0), name="docs_dashboard_redoc"),
+    path("docs-storefront-redoc/", STOREFRONT_API_DOCS_SCHEMA_VIEWS.with_ui("redoc", cache_timeout=0), name="docs_storefront_redoc")
 ]
 
 
