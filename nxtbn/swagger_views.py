@@ -1,3 +1,4 @@
+from django.shortcuts import render
 from django.urls import path, include
 from rest_framework.permissions import AllowAny
 from drf_yasg.views import get_schema_view
@@ -44,3 +45,7 @@ STOREFRONT_API_DOCS_SCHEMA_VIEWS = get_schema_view(
         path('seo/storefront/api/', include('nxtbn.seo.api.storefront.urls')),
     ]
 )
+
+
+def api_docs(request):
+    return render(request, "api_docs.html") 
