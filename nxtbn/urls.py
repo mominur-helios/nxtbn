@@ -18,13 +18,11 @@ import importlib
 import sys
 from django.http import HttpResponse
 from django.conf import settings
-from django.urls import re_path, path
+from django.urls import re_path, path, include
 from django.contrib import admin
-from django.urls import path, include
-from rest_framework.permissions import AllowAny
-from drf_yasg.views import get_schema_view
-from drf_yasg import openapi
 from django.views.generic import TemplateView
+
+from nxtbn.swagger_views import DASHBOARD_API_DOCS_SCHEMA_VIEWS, STOREFRONT_API_DOCS_SCHEMA_VIEWS
 
 
 
@@ -71,9 +69,6 @@ urlpatterns = [
     path('filemanager/storefront/api/', include('nxtbn.filemanager.api.storefront.urls')),
     path('filemanager/dashboard/api/', include('nxtbn.filemanager.api.dashboard.urls')),
 
-    path('filemanager/storefront/api/', include('nxtbn.filemanager.api.storefront.urls')),
-    path('filemanager/dashboard/api/', include('nxtbn.filemanager.api.dashboard.urls')),
-
     path('order/storefront/api/', include('nxtbn.order.api.storefront.urls')),
     path('order/dashboard/api/', include('nxtbn.order.api.dashboard.urls')),
 
@@ -87,22 +82,12 @@ urlpatterns = [
     path('seo/dashboard/api/', include('nxtbn.seo.api.dashboard.urls')),
 ]
 
-
-API_INFO = openapi.Info(
-    title="nxtbn API",
-    default_version="v1",
-    description="API documentation for nxtbn App",
-)
-
-API_DOCS_SCHEMA_VIEWS = get_schema_view(
-    API_INFO,
-    public=True,
-    permission_classes=(AllowAny,),
-)
-
-
 urlpatterns += [
-    path("api-playground/", API_DOCS_SCHEMA_VIEWS.with_ui("swagger", cache_timeout=0), name="api_playground")
+    path("dashboard-swagger-docs/", DASHBOARD_API_DOCS_SCHEMA_VIEWS.with_ui("swagger", cache_timeout=0), name="dashboard_swagger_docs"),
+    path("storefront-swagger-docs/", STOREFRONT_API_DOCS_SCHEMA_VIEWS.with_ui("swagger", cache_timeout=0), name="storefront_swagger_docs"),
+
+    path("dashboard-redoc-docs/", DASHBOARD_API_DOCS_SCHEMA_VIEWS.with_ui("redoc", cache_timeout=0), name="dashboard_redoc_docs"),
+    path("storefront-redoc-docs/", STOREFRONT_API_DOCS_SCHEMA_VIEWS.with_ui("redoc", cache_timeout=0), name="storefront_redoc_docs")
 ]
 
 
