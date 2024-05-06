@@ -8,7 +8,7 @@ from nxtbn.users.admin import User
 
 
 class AbstractUUIDModel(models.Model):
-    id = models.UUIDField(default=uuid.uuid4, primary_key=True)
+    alias = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
 
     class Meta:
         abstract = True

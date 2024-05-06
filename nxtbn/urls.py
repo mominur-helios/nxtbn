@@ -46,13 +46,14 @@ admin.site.index_title = "nxtbn Admin"
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('nxtbn.home.urls')),
+    path('', include('nxtbn.seo.urls')),
 
+    path('product/', include('nxtbn.product.urls')),
     path('users/', include('nxtbn.users.urls')),
 
     path('accounts/', include('allauth.urls')),
     path('accounts/profile/', TemplateView.as_view(template_name='account/profile.html'), name='account_profiles'),
 
-    path('product/', include('nxtbn.product.urls')),
 
     # API
     path('user/storefront/api/', include('nxtbn.users.api.storefront.urls')),
