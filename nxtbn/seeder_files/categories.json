@@ -1,0 +1,113 @@
+{
+  "category": {
+    "name": "Electronics",
+    "subcategories": [
+      {
+        "name": "Computers",
+        "subcategories": [
+          {
+            "name": "Laptops",
+            "subcategories": [
+              {
+                "name": "Gaming Laptops",
+                "subcategories": []
+              },
+              {
+                "name": "Ultrabooks",
+                "subcategories": []
+              }
+            ]
+          },
+          {
+            "name": "Desktops",
+            "subcategories": [
+              {
+                "name": "Gaming Desktops",
+                "subcategories": []
+              },
+              {
+                "name": "All-in-One Desktops",
+                "subcategories": []
+              }
+            ]
+          },
+          {
+            "name": "Tablets",
+            "subcategories": [
+              {
+                "name": "Android Tablets",
+                "subcategories": []
+              },
+              {
+                "name": "iPads",
+                "subcategories": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Mobile Devices",
+        "subcategories": [
+          {
+            "name": "Smartphones",
+            "subcategories": [
+              {
+                "name": "Android Smartphones",
+                "subcategories": []
+              },
+              {
+                "name": "iPhones",
+                "subcategories": []
+              }
+            ]
+          },
+          {
+            "name": "Wearables",
+            "subcategories": [
+              {
+                "name": "Smartwatches",
+                "subcategories": []
+              },
+              {
+                "name": "Fitness Trackers",
+                "subcategories": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Audio Equipment",
+        "subcategories": [
+          {
+            "name": "Headphones",
+            "subcategories": [
+              {
+                "name": "Over-Ear Headphones",
+                "subcategories": []
+              },
+              {
+                "name": "In-Ear Headphones",
+                "subcategories": []
+              }
+            ]
+          },
+          {
+            "name": "Speakers",
+            "subcategories": [
+              {
+                "name": "Bluetooth Speakers",
+                "subcategories": []
+              },
+              {
+                "name": "Smart Speakers",
+                "subcategories": []
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}
