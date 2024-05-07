@@ -6,7 +6,7 @@ from rest_framework.exceptions import APIException
 
 from nxtbn.core.paginator import NxtbnPagination
 from nxtbn.product.models import Product, Category, Collection
-from nxtbn.product.api.dashboard.serializers import ProductSerializer, CategorySerializer, CollectionSerializer
+from nxtbn.product.api.dashboard.serializers import ProductSerializer, CategorySerializer, CollectionSerializer, RecursiveCategorySerializer
 from nxtbn.core.admin_permissions import NxtbnAdminPermission
 
 
@@ -25,8 +25,8 @@ class ProductDetailView(generics.RetrieveUpdateDestroyAPIView):
 
 
 class CategoryListView(generics.ListCreateAPIView):
-    queryset = Category.objects.all()
-    serializer_class = CategorySerializer
+    queryset = Category.objects.filter(parent=None) # Get only top-level categories
+    serializer_class = RecursiveCategorySerializer
     pagination_class = None
 
 

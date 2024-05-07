@@ -3,6 +3,7 @@ from django.core.validators import MinValueValidator
 from decimal import Decimal
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
+from django.core.exceptions import ValidationError
 
 
 
@@ -22,12 +23,32 @@ class Category(NameDescriptionAbstract, AbstractSEOModel):
         related_name='subcategories'
     )
     
-    def __str__(self):
-        return self.name
 
     class Meta:
         verbose_name = _("Category")
         verbose_name_plural = _("Categories")
+    
+    def __str__(self):
+        return self.name
+
+    def clean(self):
+        """Validate that category depth does not exceed 2 levels."""
+        if self._get_depth() > 2:
+            raise ValidationError("Category depth must not exceed 2 levels.")
+
+    def _get_depth(self):
+        """Recursively determine the depth of the category."""
+        depth = 0
+        current = self
+        while current.parent:
+            depth += 1
+            current = current.parent
+        return depth
+
+    def save(self, *args, **kwargs):
+        """Override save to apply validation."""
+        self.clean()  # Validate before saving
+        super().save(*args, **kwargs)
 
 class Collection(NameDescriptionAbstract, AbstractSEOModel):
     created_by = models.ForeignKey(
