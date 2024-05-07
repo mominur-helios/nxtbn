@@ -46,8 +46,7 @@ class Category(NameDescriptionAbstract, AbstractSEOModel):
         return depth
 
     def save(self, *args, **kwargs):
-        """Override save to apply validation."""
-        self.clean()  # Validate before saving
+        self.clean()
         super().save(*args, **kwargs)
 
 class Collection(NameDescriptionAbstract, AbstractSEOModel):

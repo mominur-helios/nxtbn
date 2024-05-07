@@ -12,12 +12,14 @@ from nxtbn.core.admin_permissions import NxtbnAdminPermission
 
 
 class ProductListView(generics.ListCreateAPIView):
+    permission_classes = (NxtbnAdminPermission,)
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     pagination_class = NxtbnPagination
 
 
 class ProductDetailView(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = (NxtbnAdminPermission,)
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     permission_classes = (NxtbnAdminPermission,)
@@ -25,12 +27,14 @@ class ProductDetailView(generics.RetrieveUpdateDestroyAPIView):
 
 
 class CategoryListView(generics.ListCreateAPIView):
+    permission_classes = (NxtbnAdminPermission,)
     queryset = Category.objects.filter(parent=None) # Get only top-level categories
     serializer_class = RecursiveCategorySerializer
     pagination_class = None
 
 
 class CategoryDetailView(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = (NxtbnAdminPermission,)
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
     permission_classes = (NxtbnAdminPermission,)
@@ -38,6 +42,7 @@ class CategoryDetailView(generics.RetrieveUpdateDestroyAPIView):
 
 
 class CollectionListView(generics.ListCreateAPIView):
+    permission_classes = (NxtbnAdminPermission,)
     queryset = Collection.objects.all()
     serializer_class = CollectionSerializer
     permission_classes = (NxtbnAdminPermission,)
@@ -45,6 +50,7 @@ class CollectionListView(generics.ListCreateAPIView):
 
 
 class CollectionDetailView(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = (NxtbnAdminPermission,)
     queryset = Collection.objects.all()
     serializer_class = CollectionSerializer
     permission_classes = (NxtbnAdminPermission,)
