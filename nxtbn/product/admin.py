@@ -7,7 +7,6 @@ class CategoryAdmin(admin.ModelAdmin):
     list_display = ('id','name', 'parent')
     list_filter = ('parent',)
     search_fields = ('name', 'description')
-    readonly_fields = ('parent',)
 
 admin.site.register(Category,CategoryAdmin)
 
