@@ -14,13 +14,6 @@ from nxtbn.payment import PaymentMethod, PaymentStatus
 from nxtbn.payment.payment_manager import PaymentManager
 from nxtbn.users.admin import User
 
-def validate_payment_getway(value):
-    valid_gateways = settings.PAYMENT_GATEWAYS.keys()
-    if value not in valid_gateways:
-        raise ValidationError(
-            f"Invalid payment gateway: '{value}'. Allowed gateways are: {', '.join(valid_gateways)}."
-        )
-
 class Payment(AbstractBaseUUIDModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True, related_name="+")
     order = models.OneToOneField(Order, on_delete=models.CASCADE, related_name="payment")
@@ -35,15 +28,12 @@ class Payment(AbstractBaseUUIDModel):
     paid_at = models.DateTimeField(blank=True, null=True)
 
     """
-        The `payment_getway_id` field is used to indicate the payment gateway associated with a payment.
-        It should contain a valid payment gateway identifier, which must be one of the keys defined 
-        in the PAYMENT_GATEWAYS setting. Currently, the allowed value is "stripe".
+        The `payment_getway_id` field indicates which payment gateway is used. It must match a key 
+        in `PAYMENT_GATEWAYS`. Currently, "stripe" is the only valid option.
 
-        If the value of this field is not among the valid payment gateways defined in PAYMENT_GATEWAYS, 
-        it is considered invalid and will raise a ValidationError. Ensure that any data stored in this 
-        field matches one of the predefined payment gateways to avoid inconsistencies in payment processing.
+        If the value doesn't match a key in `PAYMENT_GATEWAYS`, it raises a ValidationError.
     """
-    payment_getway_id = models.CharField(max_length=100, blank=True, null=True, validators=[validate_payment_getway])
+    payment_getway_id = models.CharField(max_length=100, blank=True, null=True)
 
     def authorize_payment(self, amount: Decimal):
         """Authorize payment through the specified gateway."""
@@ -90,4 +80,13 @@ class Payment(AbstractBaseUUIDModel):
             if response.raw_data:
                 self.getway_response_raw = response.raw_data
             self.save
+
+    def clean(self):
+        super().clean()
+        valid_gateways = settings.PAYMENT_GATEWAYS.keys()
+        if self.payment_getway and self.payment_getway not in valid_gateways:
+            raise ValidationError(
+                f"Invalid payment gateway: '{self.payment_getway}'. "
+                f"Allowed gateways are: {', '.join(valid_gateways)}."
+            )
 
