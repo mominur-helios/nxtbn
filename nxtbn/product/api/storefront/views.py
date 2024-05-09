@@ -13,10 +13,16 @@ from nxtbn.product.models import Category, Collection, Product
 
 
 class ProductListView(generics.ListAPIView):
+    pagination_class = NxtbnPagination
     permission_classes = (AllowAny,)
-    pagination_class = None
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
+    filter_backends = [
+        django_filters.rest_framework.DjangoFilterBackend,
+        filters.SearchFilter, filters.OrderingFilter
+    ]
+    search_fields = ['name', 'description']
+    ordering_fields = ['name', 'created_at']
 
 class CollectionListView(generics.ListAPIView):
     permission_classes = (AllowAny,)
@@ -26,15 +32,9 @@ class CollectionListView(generics.ListAPIView):
 
 class CategoryListView(generics.ListAPIView):
     permission_classes = (AllowAny,)
-    pagination_class = NxtbnPagination
+    pagination_class = None
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
-    filter_backends = [
-        django_filters.rest_framework.DjangoFilterBackend,
-        filters.SearchFilter, filters.OrderingFilter
-    ]
-    search_fields = ['name', 'description']
-    ordering_fields = ['name', 'created_at']
 
 
 class ProductDetailView(generics.RetrieveAPIView):
