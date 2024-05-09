@@ -71,7 +71,7 @@ We welcome contributions and feedback! Here's how you can get involved:
 - **Report Issues**: Found a bug or have a suggestion? [Open an Issue](https://github.com/nxtbn-com/nxtbn/issues).
 - **Join the Discussion**: Engage with other developers and users on our [Community Forum](https://github.com/orgs/nxtbn-com/discussions).
 
-  ### 💬 Community Channels
+## 💬 Community Channels
 - **Slack**: Join our Slack workspace for real-time discussions and announcements. [Click here to join](https://join.slack.com/t/newworkspace-ppn4922/shared_invite/zt-2itd6g4nk-uP1J6mcdRFga0AEdwxih~A).
 - **Facebook Group**: Connect with us and other community members in our [Facebook Group](https://www.facebook.com/groups/).
 - **LinkedIn Group**: Network with us on LinkedIn in our [LinkedIn Group](https://www.linkedin.com/groups/).
