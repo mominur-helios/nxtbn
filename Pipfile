@@ -19,6 +19,7 @@ whitenoise = "*"
 django-cors-headers = "*"
 djangorestframework-simplejwt = "*"
 python-dotenv = "*"
+django-filter = "*"
 
 [dev-packages]
 coverage = "*"

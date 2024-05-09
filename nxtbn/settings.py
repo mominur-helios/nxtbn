@@ -118,6 +118,7 @@ HELPING_HAND_APPS = [
     'drf_yasg',
     'django_extensions',
     "corsheaders",
+    "django_filters",
 ]
 
 INSTALLED_APPS += LOCAL_APPS + HELPING_HAND_APPS
